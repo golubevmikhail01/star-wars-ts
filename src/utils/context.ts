@@ -1,8 +1,7 @@
 import {createContext} from "react";
+import {navItems} from "./constants.ts";
 
-interface SWContextType {
-    page: string;
-    changePage: (page: string) => void;
-}
-
-export const SWContext = createContext<SWContextType>({} as SWContextType);
+export const SWContext = createContext({
+    page: navItems[0],
+    changePage: (page: string) => console.log(page)
+});
