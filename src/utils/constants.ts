@@ -1,58 +1,59 @@
 import {friends} from "../assets";
 import main from '../assets/main.jpg';
+import type {Hero} from "./types";
 
 export const baseURL = 'https://sw-info-api.herokuapp.com';
 export const version = '/v1';
-export const characters = {
+export const characters: Record<string, Hero> = {
     luke: {
         name: "Luke Skywalker",
         img: main,
-        url: `${baseURL+version}/peoples/1`
+        url: `${baseURL + version}/peoples/1`
     },
-    c3po:{
+    c3po: {
         name: "C-3PO",
         img: friends[1],
-        url: `${baseURL+version}/peoples/2`
+        url: `${baseURL + version}/peoples/2`
     },
-    r2d2:{
+    r2d2: {
         name: "R2-D2",
         img: friends[0],
-        url: `${baseURL+version}/peoples/3`
+        url: `${baseURL + version}/peoples/3`
     },
-    leia:{
+    leia: {
         name: "Leia Organa",
         img: friends[8],
-        url: `${baseURL+version}/peoples/5`
+        url: `${baseURL + version}/peoples/5`
     },
-    obi_wan:{
+    obi_wan: {
         name: "Obi-Wan Kenobi",
         img: friends[7],
-        url: `${baseURL+version}/peoples/10`
+        url: `${baseURL + version}/peoples/10`
     },
-    chewbacca:{
+    chewbacca: {
         name: "Chewbacca",
         img: friends[6],
-        url: `${baseURL+version}/peoples/13`
+        url: `${baseURL + version}/peoples/13`
     },
-    han_solo:{
+    han_solo: {
         name: "Han Solo",
         img: friends[4],
-        url: `${baseURL+version}/peoples/14`
+        url: `${baseURL + version}/peoples/14`
     },
-    yoda:{
+    yoda: {
         name: "Yoda",
         img: friends[5],
-        url: `${baseURL+version}/peoples/0`
+        url: `${baseURL + version}/peoples/0`
     },
-    ewok:{
+    ewok: {
         name: "Wicket Systri Warrick",
         img: friends[2],
-        url: `${baseURL+version}/peoples/30`
+        url: `${baseURL + version}/peoples/30`
     },
-    falcon:{
+    falcon: {
         name: "Millennium Falcon",
         img: friends[6],
-        url: `${baseURL+version}/transports/10`
+        url: `${baseURL + version}/transports/10`
     }
 };
 

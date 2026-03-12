@@ -1,8 +1,9 @@
 import {defaultHero, characters, THIRTY_DAYS, baseURL} from "../utils/constants.ts";
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import {isFresh} from "../utils/functions.ts";
 import {useParams} from "react-router";
 import ErrorPage from "./ErrorPage.tsx";
+import {SWContext} from "../utils/context.ts";
 
 interface Hero {
     name: string;
@@ -16,7 +17,7 @@ interface Hero {
 
 const AboutMe = () => {
     const {heroId = defaultHero} = useParams();
-    const id = heroId as keyof typeof characters;
+    const {changeHero} = useContext(SWContext);
 
     const [hero, setHero] = useState<Hero | null>(() => {
         if (!(heroId in characters)) {
@@ -32,12 +33,16 @@ const AboutMe = () => {
         return null;
     });
 
+    changeHero(heroId);
+
     useEffect(() => {
-        if (!(heroId in characters) || hero) return;
+        if (!(heroId in characters) || hero) {
+            return;
+        }
 
         const loadData = async () => {
             try {
-                const res = await fetch(`${characters[id].url}`);
+                const res = await fetch(`${characters[heroId].url}`);
                 const data = await res.json();
 
                 const planetRes = await fetch(`${baseURL}/v1/planets/${data.homeworld}`);
@@ -58,7 +63,7 @@ const AboutMe = () => {
         };
 
         void loadData();
-    }, [heroId, hero, id]);
+    }, [heroId, hero]);
 
     if (!(heroId in characters)) {
         return <ErrorPage/>;
@@ -71,7 +76,7 @@ const AboutMe = () => {
     return (
         <div className={'grid grid-cols-10 my-2 gap-4'}>
             <img className={'col-span-3 w-full shadow-hero'}
-                 src={characters[id].img} alt={hero.name}/>
+                 src={characters[heroId].img} alt={hero.name}/>
             <p className={'col-span-7 col-start-4 text-3xl text-justify leading-normal tracking-widest'}>
                 <b>Name: {hero.name}</b><br/>
                 Birth Year: {hero.birth_year}<br/>
