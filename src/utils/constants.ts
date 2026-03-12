@@ -1,63 +1,75 @@
-import {friends} from "../assets";
-import main from '../assets/main.jpg';
 import type {Hero} from "./types";
+
+import friend0 from '../assets/main.jpg'
+import friend1 from '../assets/dreamTeam/friend1.jpg'
+import friend2 from '../assets/dreamTeam/friend2.jpg'
+import friend3 from '../assets/dreamTeam/friend3.jpg'
+import friend4 from '../assets/dreamTeam/friend4.jpg'
+import friend5 from '../assets/dreamTeam/friend5.jpg'
+import friend6 from '../assets/dreamTeam/friend6.jpg'
+import friend7 from '../assets/dreamTeam/friend7.jpg'
+import friend8 from '../assets/dreamTeam/friend8.jpg'
+import friend9 from '../assets/dreamTeam/friend9.jpg'
 
 export const baseURL = 'https://sw-info-api.herokuapp.com';
 export const version = '/v1';
 export const characters: Record<string, Hero> = {
     luke: {
         name: "Luke Skywalker",
-        img: main,
-        url: `${baseURL + version}/peoples/1`
+        img: friend0,
+        url: `${baseURL+version}/peoples/1`
     },
-    c3po: {
+    c3po:{
         name: "C-3PO",
-        img: friends[1],
-        url: `${baseURL + version}/peoples/2`
+        img: friend2,
+        url: `${baseURL+version}/peoples/2`
     },
-    r2d2: {
+    r2d2:{
         name: "R2-D2",
-        img: friends[0],
-        url: `${baseURL + version}/peoples/3`
+        img: friend1,
+        url: `${baseURL+version}/peoples/3`
     },
-    leia: {
+    leia:{
         name: "Leia Organa",
-        img: friends[8],
-        url: `${baseURL + version}/peoples/5`
+        img: friend9,
+        url: `${baseURL+version}/peoples/5`
     },
-    obi_wan: {
+    obi_wan:{
         name: "Obi-Wan Kenobi",
-        img: friends[7],
-        url: `${baseURL + version}/peoples/10`
+        img: friend8,
+        url: `${baseURL+version}/peoples/10`
     },
-    chewbacca: {
+    chewbacca:{
         name: "Chewbacca",
-        img: friends[6],
-        url: `${baseURL + version}/peoples/13`
+        img: friend4,
+        url: `${baseURL+version}/peoples/13`
     },
-    han_solo: {
+    han_solo:{
         name: "Han Solo",
-        img: friends[4],
-        url: `${baseURL + version}/peoples/14`
+        img: friend5,
+        url: `${baseURL+version}/peoples/14`
     },
-    yoda: {
+    yoda:{
         name: "Yoda",
-        img: friends[5],
-        url: `${baseURL + version}/peoples/0`
+        img: friend6,
+        url: `${baseURL+version}/peoples/0`
     },
-    ewok: {
+    ewok:{
         name: "Wicket Systri Warrick",
-        img: friends[2],
-        url: `${baseURL + version}/peoples/30`
+        img: friend3,
+        url: `${baseURL+version}/peoples/30`
     },
-    falcon: {
+    falcon:{
         name: "Millennium Falcon",
-        img: friends[6],
-        url: `${baseURL + version}/transports/10`
+        img: friend7,
+        url: `${baseURL+version}/transports/10`
     }
 };
 
-export const defaultHero = 'luke';
+
+export const friends = Object.keys(characters);
+
+export const defaultHero = friends[0];
 
 export const navItems = ['Home', 'About me', 'Star Wars', 'Contact'];
 
