@@ -1,11 +1,15 @@
 import {characters} from "../utils/constants.ts";
+import {useContext} from "react";
+import {SWContext} from "../utils/context.ts";
 
 interface FriendProps {
     friend: string;
     pos: number;
 }
 
-const Friend = ({friend, pos}:FriendProps) => {
+const Friend = ({friend, pos}: FriendProps) => {
+    const {changeHero} = useContext(SWContext);
+
     let styles = 'w-full';
     if (pos === 9) {
         styles += ' rounded-br-3xl'
@@ -14,7 +18,9 @@ const Friend = ({friend, pos}:FriendProps) => {
         styles += ' rounded-bl-3xl'
     }
     return (
-        <img className={styles} src={characters[friend].img} alt={characters[friend].name}/>
+        <button onClick={() => changeHero(friend)} className={'cursor-pointer'}>
+            <img className={styles} src={characters[friend].img} alt={characters[friend].name}/>
+        </button>
     );
 };
 

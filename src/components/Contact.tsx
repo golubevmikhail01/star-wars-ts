@@ -1,9 +1,8 @@
-import {useContext, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import {isFresh} from "../utils/functions.ts";
-import {baseURL, characters, defaultHero, THIRTY_DAYS} from "../utils/constants.ts";
-import ErrorPage from "./ErrorPage.tsx";
-import {SWContext} from "../utils/context.ts";
-import {useParams} from "react-router";
+import {baseURL, THIRTY_DAYS} from "../utils/constants.ts";
+import {useHeroFromRoute} from "../hooks/useHeroFromRoute.ts";
+import Guard from "./Guard.tsx";
 
 interface PlanetAPI {
     name: string;
@@ -24,15 +23,7 @@ const Contact = () => {
         }
     });
 
-    const {changeHero} = useContext(SWContext);
-    const {heroId = defaultHero} = useParams()
-
-    useEffect(() => {
-        if (!(heroId in characters)) {
-            return;
-        }
-        changeHero(heroId);
-    }, []);
+    const {validationHeroId} = useHeroFromRoute();
 
     useEffect(() => {
         if (!planetsInfo || !isFresh(planetsInfo, THIRTY_DAYS)) {
@@ -40,7 +31,7 @@ const Contact = () => {
                 .then(res => res.json())
                 .then(data => {
                     const newData: PlanetsInfo = {
-                        planets: data.map((planet:PlanetAPI) => planet.name),
+                        planets: data.map((planet: PlanetAPI) => planet.name),
                         lastUpdateData: Date.now()
                     }
                     setPlanetsInfo(newData);
@@ -51,40 +42,42 @@ const Contact = () => {
         }
     }, [planetsInfo])
 
-    return (heroId in characters) ? (
-        <form className={`w-4/5 my-0 mx-auto rounded-[5px] bg-[#f2f2f2] p-5`} onSubmit={(e) => {
-            e.preventDefault();
-        }}>
-            <label className={`w-full text-danger`}>First Name
-                <input className={`text-black border w-full p-3 border-[#ccc] rounded-sm mt-1.5 mb-4 resize-y`}
-                       type="text"
-                       name="firstname" placeholder="Your first name..."/>
-            </label>
-            <label className={`w-full text-danger`}>Last Name
-                <input className={`text-black border w-full p-3 border-[#ccc] rounded-sm mt-1.5 mb-4 resize-y`}
-                       type="text"
-                       name="lastname" placeholder="Your last name..."/>
-            </label>
-            <label className={`w-full text-danger`}>Planet
-                <select className={`border w-full text-black p-3 border-[#ccc] rounded-sm mt-1.5 mb-4 resize-y`}
-                        name="planet">{planetsInfo?.planets.map(planet => (
-                    <option key={planet} value={planet}>
-                        {planet}
-                    </option>
-                ))}
-                </select>
-            </label>
-            <label className={`w-full text-danger`}>Subject
-                <textarea
-                    className={`text-black border h-52 w-full p-3 border-[#ccc] rounded-sm mt-1.5 mb-4 resize-y`}
-                    name="subject" placeholder="Write something..."/>
-            </label>
-            <button
-                className={`bg-[#4CAF50] text-white py-3 px-5 border-none rounded-sm cursor-pointer hover:bg-[#45a049]`}
-                type="submit">Submit
-            </button>
-        </form>
-    ) : <ErrorPage/>
+    return (
+        <Guard when={validationHeroId.isValidHeroId}>
+            <form className={`w-4/5 my-0 mx-auto rounded-[5px] bg-[#f2f2f2] p-5`} onSubmit={(e) => {
+                e.preventDefault();
+            }}>
+                <label className={`w-full text-danger`}>First Name
+                    <input className={`text-black border w-full p-3 border-[#ccc] rounded-sm mt-1.5 mb-4 resize-y`}
+                           type="text"
+                           name="firstname" placeholder="Your first name..."/>
+                </label>
+                <label className={`w-full text-danger`}>Last Name
+                    <input className={`text-black border w-full p-3 border-[#ccc] rounded-sm mt-1.5 mb-4 resize-y`}
+                           type="text"
+                           name="lastname" placeholder="Your last name..."/>
+                </label>
+                <label className={`w-full text-danger`}>Planet
+                    <select className={`border w-full text-black p-3 border-[#ccc] rounded-sm mt-1.5 mb-4 resize-y`}
+                            name="planet">{planetsInfo?.planets.map(planet => (
+                        <option key={planet} value={planet}>
+                            {planet}
+                        </option>
+                    ))}
+                    </select>
+                </label>
+                <label className={`w-full text-danger`}>Subject
+                    <textarea
+                        className={`text-black border h-52 w-full p-3 border-[#ccc] rounded-sm mt-1.5 mb-4 resize-y`}
+                        name="subject" placeholder="Write something..."/>
+                </label>
+                <button
+                    className={`bg-[#4CAF50] text-white py-3 px-5 border-none rounded-sm cursor-pointer hover:bg-[#45a049]`}
+                    type="submit">Submit
+                </button>
+            </form>
+        </Guard>
+    )
 };
 
 export default Contact;

@@ -1,9 +1,8 @@
-import {defaultHero, characters, THIRTY_DAYS, baseURL} from "../utils/constants.ts";
-import {useContext, useEffect, useState} from "react";
+import {characters, THIRTY_DAYS, baseURL} from "../utils/constants.ts";
+import {useEffect, useState} from "react";
 import {isFresh} from "../utils/functions.ts";
-import {useParams} from "react-router";
-import ErrorPage from "./ErrorPage.tsx";
-import {SWContext} from "../utils/context.ts";
+import Guard from "./Guard.tsx";
+import {useHeroFromRoute} from "../hooks/useHeroFromRoute.ts";
 
 interface Hero {
     name: string;
@@ -16,11 +15,14 @@ interface Hero {
 }
 
 const AboutMe = () => {
-    const {heroId = defaultHero} = useParams();
-    const {changeHero} = useContext(SWContext);
+    // const {heroId = defaultHero} = useParams();
+    // const {changeHero} = useContext(SWContext);
+
+    const {validationHeroId} = useHeroFromRoute();
+    const heroId = validationHeroId.heroId;
 
     const [hero, setHero] = useState<Hero | null>(() => {
-        if (!(heroId in characters)) {
+        if (!validationHeroId.isValidHeroId) {
             return null;
         }
 
@@ -33,10 +35,8 @@ const AboutMe = () => {
         return null;
     });
 
-    changeHero(heroId);
-
     useEffect(() => {
-        if (!(heroId in characters) || hero) {
+        if (!validationHeroId.isValidHeroId || hero) {
             return;
         }
 
@@ -63,29 +63,27 @@ const AboutMe = () => {
         };
 
         void loadData();
-    }, [heroId, hero]);
-
-    if (!(heroId in characters)) {
-        return <ErrorPage/>;
-    }
-
-    if (!hero) {
-        return <div>Loading...</div>;
-    }
+    }, [heroId, hero, validationHeroId.isValidHeroId]);
 
     return (
-        <div className={'grid grid-cols-10 my-2 gap-4'}>
-            <img className={'col-span-3 w-full shadow-hero'}
-                 src={characters[heroId].img} alt={hero.name}/>
-            <p className={'col-span-7 col-start-4 text-3xl text-justify leading-normal tracking-widest'}>
-                <b>Name: {hero.name}</b><br/>
-                Birth Year: {hero.birth_year}<br/>
-                Gender: {hero.gender}<br/>
-                Height: {hero.height}cm<br/>
-                Mass: {hero.mass}kg<br/>
-                Homeworld: {hero.homeworld}
-            </p>
-        </div>
+        <Guard when={validationHeroId.isValidHeroId}>
+            {!hero ? (
+                <div>Loading...</div>
+            ) : (
+                <div className={'grid grid-cols-10 my-2 gap-4'}>
+                    <img className={'col-span-3 w-full shadow-hero'}
+                         src={characters[heroId].img} alt={hero.name}/>
+                    <p className={'col-span-7 col-start-4 text-3xl text-justify leading-normal tracking-widest'}>
+                        <b>Name: {hero.name}</b><br/>
+                        Birth Year: {hero.birth_year}<br/>
+                        Gender: {hero.gender}<br/>
+                        Height: {hero.height}cm<br/>
+                        Mass: {hero.mass}kg<br/>
+                        Homeworld: {hero.homeworld}
+                    </p>
+                </div>
+            )}
+        </Guard>
     );
 
 };
