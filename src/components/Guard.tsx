@@ -1,5 +1,5 @@
-import ErrorPage from "./ErrorPage.tsx";
 import * as React from "react";
+import ErrorPage from "./ErrorPage.tsx";
 
 type GuardProps = {
     when: boolean;
